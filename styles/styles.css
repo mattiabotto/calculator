@@ -30,9 +30,25 @@ body {
   flex: 1 1 25%;
   border-radius: 16px;
   display: flex;
+  flex-direction: column;
+  padding: .7rem;
+}
+
+.display .operation {
+  flex-basis: 30%;
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.display .current {
+  flex-basis: 70%;
+  font-size: 2em;
+}
+
+.display > * {
+  display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: .7rem;
 }
 
 .buttons-container {
@@ -55,11 +71,17 @@ body {
   user-select: none;
 }
 
+.backspace .hidden {
+  font-size: 0;
+}
+
 .backspace svg {
   width: 45%;
   min-width: 8px;
   aspect-ratio: 1 / 1;
   transform: translateX(-2px);
+  /* Makes a direct click on the SVG bypass that, so that e.target results the container, not the SVG */
+  pointer-events: none;
 }
 
 .dark {
