@@ -39,7 +39,7 @@ function main(input) {
       rightOperand = rightOperand || currentDisplay.innerText; 
 
       result = operate(operator, leftOperand, rightOperand);
-      operationDisplay.innerText = `${leftOperand} ${operator} ${rightOperand} =`
+      operationDisplay.innerText = operator ? `${leftOperand} ${operator} ${rightOperand} =` : `${rightOperand} =`
       leftOperand = result;
 
       currentDisplay.innerText = result;
@@ -64,9 +64,10 @@ function main(input) {
 
     // Mostly check for keyboard input
   } else if (isAppendableInput(input, rightOperand)) {
+    // Start a new operation giving input without operator
     if (operationDisplay.innerText.slice(-1) === '=') {
+      clear();
       rightOperand = input;
-      operationDisplay.innerText = '';
     } else {
       rightOperand += input;
     }
