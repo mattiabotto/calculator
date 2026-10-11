@@ -11,7 +11,10 @@ const operationDisplay = document.querySelector('.display .operation');
 const numPad = document.querySelector('.buttons-container');
 
 numPad.addEventListener('click', (e) => {
-   // Avoid to get the whole numPad as an input if clicking between the buttons
+  // Prevent a button to being focused and then triggering unexpected behaviours when using keyboard
+  e.target.blur();
+  
+  // Avoid to get the whole numPad as an input if clicking between the buttons
   if (e.target.className === 'buttons-container') return; 
 
   const input = e.target.innerText;
@@ -31,43 +34,47 @@ document.addEventListener('keydown', (e) => {
 function main(input) {
 
   if(input === 'C') clear();
-  // included the equal
-  else if (isOperator(input)) {
-
-    if(input === '='){
-      // Use what is already on the display in case of no new input
+  else if(input === '=') {
+    // Use what is already on the display in case of no new input
       rightOperand = rightOperand || currentDisplay.innerText; 
 
       result = operate(operator, leftOperand, rightOperand);
       operationDisplay.innerText = `${leftOperand} ${operator} ${rightOperand} =`
       leftOperand = result;
-    } else {
-      // In case last operation was made with the '=' sign
-      // Simulate the same situation of only one number being in the rightOperand variable
-      // In this case we assign the result of the previous operation (made with the = operator) to rightOperator
-      if (operationDisplay.innerText.slice(-1) === '=') {
-        operator = '';
-        rightOperand = result;
-        leftOperand = '';
-        
-      }
-      result = operate(operator, leftOperand, rightOperand);
-      operator = input;
-      rightOperand = '';
-      leftOperand = result;
-      operationDisplay.innerText = `${leftOperand} ${operator}`;
+
+      currentDisplay.innerText = result;
+
+  } else if (isOperator(input)) {
+    // In case last operation was made with the '=' sign
+    // Simulate the same situation of only one number being in the rightOperand variable
+    // In this case we assign the result of the previous operation (made with the = operator) to rightOperator
+    if (operationDisplay.innerText.slice(-1) === '=') {
+      operator = '';
+      rightOperand = result;
+      leftOperand = '';
+      
     }
+    result = operate(operator, leftOperand, rightOperand);
+    operator = input;
+    rightOperand = '';
+    leftOperand = result;
+    operationDisplay.innerText = `${leftOperand} ${operator}`;
 
     currentDisplay.innerText = result;
-    return;
 
+    // Mostly check for keyboard input
   } else if (isAppendableInput(input, rightOperand)) {
-    /* Anyway previous cases should have been handled before, the isAppendableInput should be needed only
-      in case of keyboard input */
-
-    rightOperand += input;
+    if (operationDisplay.innerText.slice(-1) === '=') {
+      rightOperand = input;
+    } else {
+      rightOperand += input;
+    }
     currentDisplay.innerText = rightOperand;
   }
+
+  console.log(`left: ${leftOperand}`);
+  console.log(`operator: ${operator}`);
+  console.log(`right: ${rightOperand}`);
 }
 
 
@@ -106,7 +113,7 @@ function isValidInput(input) {
 
 // Returns true if the input is one of the 4 operators available or equal
 function isOperator(input) {
-  return (['/', 'x', '-', '+', '='].includes(input)) ? true : false
+  return (['/', 'x', '-', '+'].includes(input)) ? true : false
 }
 
 // Map keys as received from the event 'keydown' to the same values that buttons have
