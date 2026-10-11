@@ -21,9 +21,10 @@ function main(e) {
   const input = e.target.innerText;
   if (!isValidInput(input)) return;
 
+  if(input === 'C') clear();
   // included the equal
-  if (isOperator(input)) {
-    
+  else if (isOperator(input)) {
+
     if(input === '='){
       // Use what is already on the display in case of no new input
       rightOperand = rightOperand || currentDisplay.innerText; 
@@ -122,6 +123,17 @@ function operate(operator, a, b) {
     default: // In case there is not operator, like 5 =, the result is simply 5
       return +b.toString(); 
   }
+}
+
+
+// Reset the calculator to initial state
+function clear() {
+  leftOperand = '';
+  rightOperand = '';
+  operator = '';
+  result = '0';
+  operationDisplay.innerText = '';
+  currentDisplay.innerText = '0';
 }
 
 
