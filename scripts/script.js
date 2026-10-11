@@ -35,6 +35,7 @@ function main(input) {
 
   if (input === 'C') clear();
   else if (input === 'CE') clearEntry();
+  else if (input === 'Backspace') backspace();
   else if (input === '=') {
     // Use what is already on the display in case of no new input
       rightOperand = rightOperand || currentDisplay.innerText; 
@@ -83,6 +84,12 @@ function main(input) {
 
 function add(a, b) {
   return (+a + +b).toString();
+}
+
+
+function backspace() {
+  rightOperand = rightOperand.slice(0, -1);
+  currentDisplay.innerText = rightOperand ? rightOperand : '0';
 }
 
 
