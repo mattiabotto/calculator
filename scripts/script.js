@@ -66,7 +66,7 @@ function main(input) {
     currentDisplay.innerText = result;
 
     // Mostly check for keyboard input
-  } else if (isAppendableInput(input, rightOperand)) {
+  } else if (isAppendableInput(input, rightOperand) && currentDisplay.innerText.length < 14) {
     // Start a new operation giving input without operator
     if (operationDisplay.innerText.slice(-1) === '=') {
       clear();
@@ -76,6 +76,8 @@ function main(input) {
     }
     currentDisplay.innerText = rightOperand;
   }
+  
+  currentDisplay.innerText = currentDisplay.innerText.slice(0, 14);
 }
 
 
