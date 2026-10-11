@@ -32,10 +32,18 @@ function main(e) {
   }
 
   if (isOperator(input)) {
-    leftOperand = rightOperand;
     operator = input;
+
+    if (leftOperand && rightOperand) {
+      rightOperand = operate(operator, +leftOperand, +rightOperand).toString();
+      // Show result into the current screen
+      currentDisplay.innerText = rightOperand;
+    }
+
+    leftOperand = rightOperand;
     operationDisplay.innerText = `${leftOperand} ${operator}`;
 
+    // TODO: check what happens in case of first time input!
     rightOperand = '';
     return;
   } 
@@ -52,12 +60,8 @@ function main(e) {
 /*
 Input
 
-- Start: userInput = 0, current displays 0
-- An event listener on the buttons is added
-
-
 - Different buttons trigger different actions:
-  - Numbers and the point change the content of userInput, and current display is updated with userInput
+  - Numbers and the point change the content of rightOperand, and current display is updated with righOperand
   - +/- operator invert the sign of userInput
   - operators (+, -, x, /):
     - Move userInput into leftOperand
