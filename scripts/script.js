@@ -9,17 +9,26 @@ const currentDisplay = document.querySelector('.display .current');
 const operationDisplay = document.querySelector('.display .operation');
 
 const numPad = document.querySelector('.buttons-container');
-numPad.addEventListener('click', main);
+
+numPad.addEventListener('click', (e) => {
+   // Avoid to get the whole numPad as an input if clicking between the buttons
+  if (e.target.className === 'buttons-container') return; 
+
+  const input = e.target.innerText;
+  if (!isValidInput(input)) return;
+
+  main(input);
+});
+
+document.addEventListener('keydown', (e) => {
+  const input = mapKey(e.key);
+
+  main(input);
+});
 
 
 // Main function with the calculation logic
-function main(e) {
-
-  // Avoid to get the whole numPad as an input if clicking between the buttons
-  if (e.target.className === 'buttons-container') return; 
-  
-  const input = e.target.innerText;
-  if (!isValidInput(input)) return;
+function main(input) {
 
   if(input === 'C') clear();
   // included the equal
@@ -98,6 +107,15 @@ function isValidInput(input) {
 // Returns true if the input is one of the 4 operators available or equal
 function isOperator(input) {
   return (['/', 'x', '-', '+', '='].includes(input)) ? true : false
+}
+
+// Map keys as received from the event 'keydown' to the same values that buttons have
+function mapKey(key) {
+  return (key === 'Delete') ? 'CE' :
+    (key === 'Escape') ? 'C' :
+    (key === 'Enter') ? '=' :
+    (key === '*') ? 'x' :
+    key;
 }
 
 
