@@ -60,7 +60,11 @@ body {
   gap: 8px;
 }
 
-.buttons-container div {
+.buttons-container button {
+  border-style: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
   flex-basis: 22%;
   aspect-ratio: 9/8;
   border-radius: 40px;
@@ -92,12 +96,20 @@ body {
   background-color: #363636;
 }
 
+.dark:active {
+  background-color: #282828;
+}
+
 .light {
   background-color: #363636;
 }
 
 .light:hover {
   background-color: #282828;
+}
+
+.light:active {
+  background-color: #363636;
 }
 
 .orange {
@@ -107,6 +119,10 @@ body {
 
 .orange:hover {
   background-color: #dd6f00;
+}
+
+.orange:active {
+  background-color: #FF8000;
 }
 
 .display.dark:hover {
