@@ -36,6 +36,7 @@ function main(input) {
   if (input === 'C') clear();
   else if (input === 'CE') clearEntry();
   else if (input === 'Backspace') backspace();
+  else if (input === '+/-') negate();
   else if (input === '=') {
     // Use what is already on the display in case of no new input
       rightOperand = rightOperand || currentDisplay.innerText; 
@@ -75,10 +76,6 @@ function main(input) {
     }
     currentDisplay.innerText = rightOperand;
   }
-
-  console.log(`left: ${leftOperand}`);
-  console.log(`operator: ${operator}`);
-  console.log(`right: ${rightOperand}`);
 }
 
 
@@ -161,6 +158,18 @@ function mapKey(key) {
 function multiply(a, b) {
   if (b === '') return a;
   return (+a * +b).toString();
+}
+
+
+function negate() {
+  if (operationDisplay.innerText.slice(-1) === '=' || rightOperand === '') {
+    leftOperand = (+leftOperand * -1).toString();
+    currentDisplay.innerText = leftOperand;
+    if (rightOperand === '') operationDisplay.innerText = `${leftOperand} ${operator}`;
+  } else {
+    rightOperand = (+rightOperand * -1).toString();
+    currentDisplay.innerText = rightOperand;
+  }
 }
 
 
