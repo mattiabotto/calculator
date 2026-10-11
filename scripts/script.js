@@ -66,6 +66,7 @@ function main(input) {
   } else if (isAppendableInput(input, rightOperand)) {
     if (operationDisplay.innerText.slice(-1) === '=') {
       rightOperand = input;
+      operationDisplay.innerText = '';
     } else {
       rightOperand += input;
     }
