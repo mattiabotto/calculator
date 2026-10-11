@@ -33,8 +33,9 @@ document.addEventListener('keydown', (e) => {
 // Main function with the calculation logic
 function main(input) {
 
-  if(input === 'C') clear();
-  else if(input === '=') {
+  if (input === 'C') clear();
+  else if (input === 'CE') clearEntry();
+  else if (input === '=') {
     // Use what is already on the display in case of no new input
       rightOperand = rightOperand || currentDisplay.innerText; 
 
@@ -82,6 +83,28 @@ function main(input) {
 
 function add(a, b) {
   return (+a + +b).toString();
+}
+
+
+// Reset the calculator to initial state
+function clear() {
+  leftOperand = '';
+  rightOperand = '';
+  operator = '';
+  result = '0';
+  operationDisplay.innerText = '';
+  currentDisplay.innerText = '0';
+}
+
+
+function clearEntry() {
+  rightOperand = '';
+  currentDisplay.innerText = '0';
+  if (operationDisplay.innerText.slice(-1) === '=') {
+    operationDisplay.innerText = '';
+    operator = '';
+    leftOperand = '';
+  }
 }
 
 
@@ -150,17 +173,6 @@ function operate(operator, a, b) {
     default: // In case there is not operator, like 5 =, the result is simply 5
       return +b.toString(); 
   }
-}
-
-
-// Reset the calculator to initial state
-function clear() {
-  leftOperand = '';
-  rightOperand = '';
-  operator = '';
-  result = '0';
-  operationDisplay.innerText = '';
-  currentDisplay.innerText = '0';
 }
 
 

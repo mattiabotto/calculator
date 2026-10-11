@@ -43,6 +43,7 @@ body {
 .display .current {
   flex-basis: 70%;
   font-size: 2em;
+  overflow-x: auto;
 }
 
 .display > * {
