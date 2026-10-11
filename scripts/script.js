@@ -1,6 +1,7 @@
 let leftOperand = '';
 let rightOperand = '';
 let operator = '';
+let result = '0';
 
 // Lower part of the display, showing the current input or the result
 const currentDisplay = document.querySelector('.display .current');
@@ -20,79 +21,57 @@ function main(e) {
   const input = e.target.innerText;
   if (!isValidInput(input)) return;
 
-  if (input === '=' && rightOperand && leftOperand) {
-    // Show the operation before updating variables
-    operationDisplay.innerText = `${leftOperand} ${operator} ${rightOperand} =`;
-    
-    rightOperand = operate(operator, +leftOperand, +rightOperand).toString();
-    
-    // Show result into the current screen
-    currentDisplay.innerText = rightOperand;
-    leftOperand = rightOperand;
-  }
-
+  // included the equal
   if (isOperator(input)) {
-    operator = input;
+    
+    if(input === '='){
+      // Use what is already on the display in case of no new input
+      rightOperand = rightOperand || currentDisplay.innerText; 
 
-    if (leftOperand && rightOperand) {
-      rightOperand = operate(operator, +leftOperand, +rightOperand).toString();
-      // Show result into the current screen
-      currentDisplay.innerText = rightOperand;
+      result = operate(operator, leftOperand, rightOperand);
+      operationDisplay.innerText = `${leftOperand} ${operator} ${rightOperand} =`
+      leftOperand = result;
+    } else {
+      // In case last operation was made with the '=' sign
+      // Simulate the same situation of only one number being in the rightOperand variable
+      // In this case we assign the result of the previous operation (made with the = operator) to rightOperator
+      if (operationDisplay.innerText.slice(-1) === '=') {
+        operator = '';
+        rightOperand = result;
+        leftOperand = '';
+        
+      }
+      result = operate(operator, leftOperand, rightOperand);
+      operator = input;
+      rightOperand = '';
+      leftOperand = result;
+      operationDisplay.innerText = `${leftOperand} ${operator}`;
     }
 
-    leftOperand = rightOperand;
-    operationDisplay.innerText = `${leftOperand} ${operator}`;
-
-    // TODO: check what happens in case of first time input!
-    rightOperand = '';
+    currentDisplay.innerText = result;
     return;
-  } 
 
-  if (isAppendableInput(input, rightOperand)) {
+  } else if (isAppendableInput(input, rightOperand)) {
+    /* Anyway previous cases should have been handled before, the isAppendableInput should be needed only
+      in case of keyboard input */
+
     rightOperand += input;
     currentDisplay.innerText = rightOperand;
   }
-
-  console.log(`leftOperand: ${leftOperand} \n rightOperand: ${rightOperand}`);
-
 }
-
-/*
-Input
-
-- Different buttons trigger different actions:
-  - Numbers and the point change the content of rightOperand, and current display is updated with righOperand
-  - +/- operator invert the sign of userInput
-  - operators (+, -, x, /):
-    - Move userInput into leftOperand
-    - Display leftOperand and the operator into the operation display
-    - leftOperand (or the old userInput), should stay on the current display, and used in case no further userInput
-      is provided, but instead an equal rightaway is provided (ex. the input: 8, +, = should evaluate as 8 + 8 = 16
-      and every pression of the = sign should continue with the same operation and the same rightOperand, updating the
-      left operand with the new result, like 8 + 8 = 16 -> 16 + 8 = 24 -> 24 + 8 = 32. etc...).
-  - '=' (equal) sign:
-    - If there are no operators doesn't have an effect
-    - If there is an operator performs the operation and add the rightOperand into the operation display. 
-      The result is displayed into the current display. If continued to press then it takes the result and uses that as
-      the leftOperand, keeping the rightOperand invariate.
-  - 'C'  : clears everything and bring back to initial state
-  - 'CE' : bring back the current display to 0:
-    - If the user was entering the rightOperand then clears that to 0
-    - If the user was entering the leftOperand then clears that
-    - If a result was already present then it clears that (the operator and the rightOperand remain)
-  - '<--' (backspace) : remove only 1 digit from the input (also clear the operation display)
-*/
 
 
 function add(a, b) {
-  return a + b;
+  return (+a + +b).toString();
 }
+
 
 /* How to handle division by 0?
    * Leave the Infinity return, or return a string 'Cannot divide by 0'?
    */
 function divide(a, b) {
-  return a / b;
+  if (b === '') return a;
+  return (+a / +b).toString();
 }
 
 
@@ -114,17 +93,22 @@ function isValidInput(input) {
   return validSigns.includes(input) || (+input >= 0 && +input <= 9) ? true : false;
 }
 
-// Returns true if the input is one of the 4 operators available (equal not included)
+
+// Returns true if the input is one of the 4 operators available or equal
 function isOperator(input) {
-  return (['/', 'x', '-', '+'].includes(input)) ? true : false
+  return (['/', 'x', '-', '+', '='].includes(input)) ? true : false
 }
 
 
 function multiply(a, b) {
-  return a * b;
+  if (b === '') return a;
+  return (+a * +b).toString();
 }
 
 
+// a and b are received as strings, and returned as strings
+// conversion from string to number is handled inside the single functions
+// This allow to handle the cases where b is an empty string, meaning that rightOperand is empty
 function operate(operator, a, b) {
   switch (operator) {
     case '+':
@@ -135,25 +119,12 @@ function operate(operator, a, b) {
       return multiply(a, b);
     case '/':
       return divide(a, b);
-    default:
-      return 'operation not supported';
+    default: // In case there is not operator, like 5 =, the result is simply 5
+      return +b.toString(); 
   }
 }
 
 
 function subtract(a, b) {
-  return a - b;
-}
-
-// Update what is shown in the current display (the bigger one in the bottom part)
-// When the display is updated also the rightOperand variable is updated
-function updateDisplay(input) {
-  if (isAppendableInput(input, currentDisplay.innerText)) {
-      if (currentDisplay.innerText === '0') {
-        currentDisplay.innerText = input;
-      } else {
-        currentDisplay.innerText += input;
-      }
-      rightOperand = currentDisplay.innerText;
-    }
+  return (+a - +b).toString();
 }
