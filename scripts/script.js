@@ -25,7 +25,8 @@ numPad.addEventListener('click', (e) => {
 
 document.addEventListener('keydown', (e) => {
   const input = mapKey(e.key);
-
+  if (!isValidInput(input)) return;
+  
   main(input);
 });
 
@@ -159,7 +160,7 @@ function isAppendableInput(input, prefix) {
 
 // Returns true if the input is valid
 function isValidInput(input) {
-  const validSigns = ['CE', 'C', 'backspace', '/', 'x', '-', '+', '=', '.', '+/-'];
+  const validSigns = ['CE', 'C', 'Backspace', '/', 'x', '-', '+', '=', '.', '+/-'];
   return validSigns.includes(input) || (+input >= 0 && +input <= 9) ? true : false;
 }
 
