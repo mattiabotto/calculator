@@ -76,10 +76,14 @@ function main(input) {
     }
     currentDisplay.innerText = rightOperand;
   }
-  
-  currentDisplay.innerText = currentDisplay.innerText.slice(0, 14);
-}
 
+  currentDisplay.innerText = currentDisplay.innerText.slice(0, 14);
+  if (currentDisplay.innerText === 'Infinity') {
+    disableButtons();
+    currentDisplay.style.fontSize = '1.5em';
+    currentDisplay.innerText = "Cannot divide by 0";
+  }
+}
 
 function add(a, b) {
   return (+a + +b).toString();
@@ -100,6 +104,9 @@ function clear() {
   result = '0';
   operationDisplay.innerText = '';
   currentDisplay.innerText = '0';
+  currentDisplay.style.fontSize = '2em';
+  enableButtons();
+  
 }
 
 
@@ -114,12 +121,28 @@ function clearEntry() {
 }
 
 
+// Disable all the buttons but the 'C' button
+function disableButtons() {
+  const buttons = document.querySelectorAll('button');
+  // Take out the 'C' button
+  const filtButtons = Array.from(buttons).filter(item => item.innerText !== 'C');
+  filtButtons.forEach((button) => button.disabled = true);
+}
+
+
 /* How to handle division by 0?
    * Leave the Infinity return, or return a string 'Cannot divide by 0'?
    */
 function divide(a, b) {
   if (b === '') return a;
   return (+a / +b).toString();
+}
+
+
+// Enable all the buttons
+function enableButtons() {
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach((button) => button.disabled = false);
 }
 
 
@@ -135,7 +158,6 @@ function isAppendableInput(input, prefix) {
 
 
 // Returns true if the input is valid
-// For now doesn't include keyboard input
 function isValidInput(input) {
   const validSigns = ['CE', 'C', 'backspace', '/', 'x', '-', '+', '=', '.', '+/-'];
   return validSigns.includes(input) || (+input >= 0 && +input <= 9) ? true : false;
