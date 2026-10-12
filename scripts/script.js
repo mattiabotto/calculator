@@ -26,7 +26,7 @@ numPad.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   const input = mapKey(e.key);
   if (!isValidInput(input)) return;
-  
+
   main(input);
 });
 
@@ -79,7 +79,7 @@ function main(input) {
   }
 
   currentDisplay.innerText = currentDisplay.innerText.slice(0, 14);
-  if (currentDisplay.innerText === 'Infinity') {
+  if (currentDisplay.innerText === 'Infinity' || currentDisplay.innerText === '-Infinity') {
     disableButtons();
     currentDisplay.style.fontSize = '1.5em';
     currentDisplay.innerText = "Cannot divide by 0";
