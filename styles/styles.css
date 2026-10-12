@@ -11,8 +11,14 @@ body {
   max-height: 100vh;
 }
 
+h1 {
+  text-align: center;
+  padding-top: 1rem;
+  color: #333;
+}
+
 .calculator {
-  margin: 6rem auto 0;
+  margin: 2rem auto;
   padding: 1rem;
   width: 80vw;
   max-width: 400px;
@@ -145,4 +151,10 @@ body {
 
 .buttons-container button:disabled {
   background-color: #222;
+}
+
+footer {
+  font-size: .7rem;
+  color: #222;
+  text-align: center;
 }
